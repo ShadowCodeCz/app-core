@@ -1,3 +1,4 @@
+import json
 import logging
 import logging.config
 import os.path
@@ -7,6 +8,7 @@ import pathlib
 class AppCore:
     def __init__(self, name):
         self.name = name
+        self.flat_cfg = {}
 
     def package_directory(self):
         return os.path.abspath(os.path.dirname(__file__))
@@ -97,3 +99,24 @@ class AppCore:
                 }
             },
         }
+
+    def flat_cfg_path(self):
+        return os.path.join(self.app_cfg_directory(), "flat.json")
+
+    def create_flat_cfg(self, default_cfg):
+        path = self.flat_cfg_path()
+        if not os.path.exists(path):
+            try:
+                with open(path, "w+") as f:
+                    json.dump(default_cfg, f)
+                    self.logger().debug(f"Flat CFG created in path {path}")
+            except Exception as e:
+                self.logger().error(f"Creation of flat CFG failed. Path was {path}")
+
+    def read_flat_cfg(self):
+        try:
+            with open(self.flat_cfg_path(), "r") as f:
+                self.flat_cfg = json.load(f)
+        except Exception as e:
+            self.logger().error(f"Reading of flat CFG failed. Path was {self.flat_cfg_path()}")
+
