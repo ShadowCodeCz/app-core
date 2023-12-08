@@ -40,6 +40,11 @@ class AppCore:
     def app_log_path(self):
         return os.path.join(self.app_directory(), "log.txt")
 
+    def create_empty_extended_help(self):
+        if not os.path.exists(self.extended_help_path()):
+            with open(self.extended_help_path(), "w+") as f:
+                f.write("")
+
     def read_extended_help(self):
         try:
             if os.path.exists(self.extended_help_path()):
@@ -108,7 +113,7 @@ class AppCore:
         if not os.path.exists(path):
             try:
                 with open(path, "w+") as f:
-                    json.dump(default_cfg, f)
+                    json.dump(default_cfg, f, indent=4)
                     self.logger().debug(f"Flat CFG created in path {path}")
             except Exception as e:
                 self.logger().error(f"Creation of flat CFG failed. Path was {path}")
