@@ -1,2 +1,2 @@
-pip uninstall --yes app-core
+pip uninstall --yes app_core
 pip install .

@@ -14,11 +14,11 @@ classifiers = [
 description = "AppCore"
 
 setup(
-    name='app-core',
+    name='app_core',
     version='0.1',
     packages=find_packages(),
     package_data={
-        "app-core": ['*', '*/*', '*/*/*', '*/*/*/*'],
+        "app_core": ['*', '*/*', '*/*/*', '*/*/*/*'],
     },
     url='',
     project_urls={
@@ -31,6 +31,6 @@ setup(
     long_description="",
     long_description_content_type='text/markdown',
     classifiers=classifiers,
-    keywords='app-core',
+    keywords='app_core',
     install_requires=[],
 )
