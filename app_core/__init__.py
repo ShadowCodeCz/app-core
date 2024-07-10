@@ -8,7 +8,7 @@ import pathlib
 class AppCore:
     def __init__(self, name):
         self.name = name
-        self.flat_cfg = {}
+        self.cfg = {}
 
     def package_directory(self):
         return os.path.abspath(os.path.dirname(__file__))
@@ -38,10 +38,11 @@ class AppCore:
         return os.path.join(self.app_directory(), filename)
 
     def app_log_path(self):
-        return os.path.join(self.app_directory(), "log.txt")
+        return os.path.join(self.app_directory(), "log", "log.txt")
 
     def create_empty_extended_help(self):
         if not os.path.exists(self.extended_help_path()):
+            os.makedirs(os.path.dirname(self.extended_help_path()), exist_ok=True)
             with open(self.extended_help_path(), "w+") as f:
                 f.write("")
 
@@ -105,23 +106,23 @@ class AppCore:
             },
         }
 
-    def flat_cfg_path(self):
-        return os.path.join(self.app_cfg_directory(), "flat.json")
+    def cfg_path(self):
+        return os.path.join(self.app_cfg_directory(), "cfg.json")
 
-    def create_flat_cfg(self, default_cfg):
-        path = self.flat_cfg_path()
+    def create_cfg(self, default_cfg):
+        path = self.cfg_path()
         if not os.path.exists(path):
             try:
                 with open(path, "w+") as f:
                     json.dump(default_cfg, f, indent=4)
-                    self.logger().debug(f"Flat CFG created in path {path}")
+                    self.logger().debug(f"CFG created in path {path}")
             except Exception as e:
-                self.logger().error(f"Creation of flat CFG failed. Path was {path}")
+                self.logger().error(f"Creation of CFG failed. Path was {path}")
 
-    def read_flat_cfg(self):
+    def read_cfg(self):
         try:
-            with open(self.flat_cfg_path(), "r") as f:
-                self.flat_cfg = json.load(f)
+            with open(self.cfg_path(), "r") as f:
+                self.cfg = json.load(f)
         except Exception as e:
-            self.logger().error(f"Reading of flat CFG failed. Path was {self.flat_cfg_path()}")
+            self.logger().error(f"Reading of CFG failed. Path was {self.cfg_path()}")
 
